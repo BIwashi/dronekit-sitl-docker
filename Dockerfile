@@ -56,6 +56,15 @@ ENV host host.docker.internal
 # GUIをホストで実行するための環境変数
 ENV DISPLAY host.docker.internal:0.0
 
+# alias設定
+RUN echo $'\n\
+alias ll="ls -l"\n\
+alias la="ls -a"\n\
+alias lla="ls -l -a"\n\
+alias python="python3"\n\
+alias pip="pip3"\n\
+' >> /root/.bashrc
+
 # 接続確認
 RUN apt-get install -y x11-apps 
 # 接続できていれば、$xeyes で目が表示されるはず
