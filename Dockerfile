@@ -2,6 +2,9 @@
 # ubuntuに変更
 FROM ubuntu:latest
 
+# keyboard-configuration回避対策
+ARG DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /usr/src
 
 RUN apt-get update -y && apt-get upgrade -y
@@ -30,6 +33,7 @@ RUN apt-get install -y libfuse2
 RUN apt-get autoremove -y
 
 # DroneKitのインストール
+# pipではなくpip3でインストール
 # RUN pip3 install matplotlib
 RUN pip3 install dronekit
 RUN pip3 install dronekit-sitl
@@ -41,7 +45,9 @@ RUN pip3 install paho-mqtt
 RUN pip3 install simplejson cherrypy jinja2
 
 # dronekitをクローン
-RUN git clone https://github.com/dronekit/dronekit-python.git
+# RUN git clone https://github.com/dronekit/dronekit-python.git
+# forkをクローン
+RUN git clone https://github.com/BIwashi/dronekit-python.git
 
 WORKDIR /usr/src/dronekit-python
 
@@ -65,26 +71,26 @@ RUN gpasswd -a ${USER} sudo
 # 一般ユーザーのパスワード設定
 RUN echo "${USER}:${PASS}" | chpasswd
 
-WORKDIR /usr/src
 
-# # qtでqdcをビルドする
-# # https://dev.qgroundcontrol.com/master/en/getting_started/index.html
-# RUN apt-get install -y qtbase5-dev qttools5-dev-tools qt5-default
-# RUN apt-get install -y qtcreator
+# # qtcreator環境
+# https://dev.qgroundcontrol.com/master/en/getting_started/index.html
+RUN apt-get install -y qtbase5-dev qttools5-dev-tools qt5-default
+RUN apt-get install -y qtcreator
+
+# qgcよう
 # RUN apt-get install -y speech-dispatcher libudev-dev libsdl2-dev
 # RUN git clone https://github.com/mavlink/qgroundcontrol.git --recursive
 # WORKDIR /usr/src/qgroundcontrol
 # RUN git submodule update
 
-WORKDIR /usr/src
 
 # # QGCの設定
 
-RUN usermod -a -G dialout $USER
-RUN apt-get remove modemmanager -y
-RUN apt install gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-gl -y
-RUN wget https://s3-us-west-2.amazonaws.com/qgroundcontrol/latest/QGroundControl.AppImage
-RUN chmod +x ./QGroundControl.AppImage
+# RUN usermod -a -G dialout $USER
+# RUN apt-get remove modemmanager -y
+# RUN apt install gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-gl -y
+# RUN wget https://s3-us-west-2.amazonaws.com/qgroundcontrol/latest/QGroundControl.AppImage
+# RUN chmod +x ./QGroundControl.AppImage
 
 # 一般ユーザに切り替える
 USER ${USER}
