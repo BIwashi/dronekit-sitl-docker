@@ -10,6 +10,7 @@ services:
     # カレントディレクトリとコンテナ内のuer/srcをボリューム
     volumes:
       - ./:/usr/src/share
+      - ~/../../tmp:/tmp
     ports:
       - "5760:5760"
       - "8080:8080"

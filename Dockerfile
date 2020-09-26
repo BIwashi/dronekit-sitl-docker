@@ -24,21 +24,21 @@ RUN apt-get install -y sudo
 RUN apt-get install -y gpsd
 RUN apt-get install -y python-tk
 # GQCエラー対策　https://qiita.com/hiconyan/items/2ea4815745164132221b
-RUN apt-get install -y kmod 
+RUN apt-get install -y kmod
 RUN apt-get install -y libfuse2
 
 RUN apt-get autoremove -y
 
 # DroneKitのインストール
-RUN pip install matplotlib
-RUN pip install dronekit
-RUN pip install dronekit-sitl
+# RUN pip3 install matplotlib
+RUN pip3 install dronekit
+RUN pip3 install dronekit-sitl
 
 # paho-mqttのインストール
-RUN pip install paho-mqtt
+RUN pip3 install paho-mqtt
 
 # drone_delivery.py用
-RUN pip install simplejson cherrypy jinja2
+RUN pip3 install simplejson cherrypy jinja2
 
 # dronekitをクローン
 RUN git clone https://github.com/dronekit/dronekit-python.git
