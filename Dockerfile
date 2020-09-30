@@ -5,7 +5,7 @@ FROM ubuntu:latest
 # keyboard-configuration回避対策
 ARG DEBIAN_FRONTEND=noninteractive
 
-WORKDIR /usr/src
+WORKDIR /home/user/src
 
 RUN apt-get update -y && apt-get upgrade -y
 
@@ -37,6 +37,8 @@ RUN apt-get autoremove -y
 # RUN pip3 install matplotlib
 RUN pip3 install dronekit
 RUN pip3 install dronekit-sitl
+# USB接続用
+RUN pip3 install pyserial
 
 # paho-mqttのインストール
 RUN pip3 install paho-mqtt
@@ -49,7 +51,7 @@ RUN pip3 install simplejson cherrypy jinja2
 # forkをクローン
 RUN git clone https://github.com/BIwashi/dronekit-python.git
 
-WORKDIR /usr/src/dronekit-python
+WORKDIR /home/user/src/dronekit-python
 
 ENV host host.docker.internal
 
@@ -63,7 +65,7 @@ alias la="ls -a"\n\
 alias lla="ls -l -a"\n\
 alias python="python3"\n\
 alias pip="pip3"\n\
-' >> /root/.bashrc
+' >> /home/user/.bashrc
 
 # 接続確認
 RUN apt-get install -y x11-apps 
@@ -86,7 +88,7 @@ RUN echo "${USER}:${PASS}" | chpasswd
 RUN apt-get install -y qtbase5-dev qttools5-dev-tools qt5-default
 RUN apt-get install -y qtcreator
 
-# qgcよう
+# qgc用
 # RUN apt-get install -y speech-dispatcher libudev-dev libsdl2-dev
 # RUN git clone https://github.com/mavlink/qgroundcontrol.git --recursive
 # WORKDIR /usr/src/qgroundcontrol

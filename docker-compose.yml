@@ -9,7 +9,8 @@ services:
     tty: true
     # カレントディレクトリとコンテナ内のuer/srcをボリューム
     volumes:
-      - ./:/usr/src
+      - ./:/home/user/src
+      - /dev/:/dev/
       # - ~/../../tmp:/tmp
     ports:
       - "5760:5760"
@@ -18,5 +19,7 @@ services:
       - SYS_ADMIN
     devices:
       - /dev/fuse
+      # - /dev/:/dev/
+      - /dev/tty.usbmodem01:/dev/tty.usbmodem01
     privileged: true
     
