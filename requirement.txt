@@ -1,0 +1,7 @@
+dronekit
+dronekit-sitl
+pyserial
+paho-mqtt
+simplejson
+cherrypy
+jinja2
