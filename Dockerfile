@@ -29,8 +29,11 @@ RUN apt-get install -y python-tk
 # GQCエラー対策　https://qiita.com/hiconyan/items/2ea4815745164132221b
 RUN apt-get install -y kmod
 RUN apt-get install -y libfuse2
+RUN apt-get install -y curl
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 RUN apt-get autoremove -y
+
 
 # DroneKitのインストール
 # pipではなくpip3でインストール
@@ -60,12 +63,40 @@ ENV DISPLAY host.docker.internal:0.0
 
 # alias設定
 RUN echo $'\n\
-alias ll="ls -l"\n\
-alias la="ls -a"\n\
-alias lla="ls -l -a"\n\
-alias python="python3"\n\
-alias pip="pip3"\n\
-' >> /home/user/.bashrc
+    alias ll="ls -l"\n\
+    alias la="ls -a"\n\
+    alias lla="ls -l -a"\n\
+    alias python="python3"\n\
+    alias pip="pip3"\n\
+    function _update_ps1() {\n\
+    PS1="$(powerline-shell $?)"\n\
+    }\n\
+    \n\
+    if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then\n\
+    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"\n\
+    fi\n\
+    ' >> /home/user/.bashrc
+
+# RUN mkdir -p ~/.config/powerline-shell
+# RUN powerline-shell --generate-config > ~/.config/powerline-shell/config.json
+# RUN eho '{\n\
+#     "segments": [\n\
+#     "time",\n\
+#     "virtual_env",\n\
+#     "username",\n\
+#     \n\
+#     "ssh",\n\
+#     "cwd",\n\
+#     "git",\n\
+#     "hg",\n\
+#     "jobs",\n\
+#     \n\
+#     "newline"\n\
+#     ]\n\
+#     }\n\
+#     ' >> ~/.config/powerline-shell/config.json
+
+
 
 # 接続確認
 RUN apt-get install -y x11-apps 
@@ -103,5 +134,16 @@ RUN apt-get install -y qtcreator
 # RUN wget https://s3-us-west-2.amazonaws.com/qgroundcontrol/latest/QGroundControl.AppImage
 # RUN chmod +x ./QGroundControl.AppImage
 
+
+
+# powerline-shell
+WORKDIR /home/user
+RUN git clone https://github.com/b-ryan/powerline-shell
+WORKDIR /home/user/powerline-shell
+RUN python3 setup.py install
+
 # 一般ユーザに切り替える
 USER ${USER}
+
+
+
